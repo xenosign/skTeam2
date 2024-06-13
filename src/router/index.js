@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/pages/Home.vue';
 import Calendar from '@/pages/Calendar.vue';
-import Chart from '../pages/chart.vue';
+import Chart from '../pages/Chart.vue';
 import Settings from '@/pages/Settings.vue';
 import Cal from '@/components/Cal.vue';
 

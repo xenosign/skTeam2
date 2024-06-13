@@ -11,12 +11,6 @@
       >
         지출
       </button>
-      <button
-        @click="setType('transfer')"
-        :class="{ active: type === 'transfer' }"
-      >
-        이체
-      </button>
     </div>
 
     <!-- 내역 input -->
@@ -31,11 +25,22 @@
       </div>
       <div>
         <label for="category">분류</label>
-        <select v-model="category">
+        <select v-model="category" v-if="type === 'income'">
+          <option value="">분류를 선택해주세요</option>
+          <option value="월급">월급</option>
+          <option value="용돈">용돈</option>
+          <option value="부수입">부수입</option>
+          <option value="금융소득">금융소득</option>
+          <option value="기타">기타</option>
+        </select>
+        <select v-model="category" v-if="type === 'expense'">
           <option value="">분류를 선택해주세요</option>
           <option value="식비">식비</option>
           <option value="교통비">교통비</option>
-          <option value="쇼핑">쇼핑</option>
+          <option value="문화생활">문화생활</option>
+          <option value="패션/미용">패션/미용</option>
+          <option value="마트/편의점">마트/편의점</option>
+          <option value="고정비">고정비</option>
           <option value="기타">기타</option>
         </select>
       </div>
@@ -65,13 +70,10 @@ const description = ref('');
 const showModal = ref(false); // 모달을 처음에 보여주도록 설정
 
 const setType = (newType) => {
-  // console.log(newType);
   type.value = newType;
 };
 
 const submitTransaction = () => {
-  console.log('!');
-
   if (!date.value) {
     alert('날짜를 선택해주세요.');
     return;
@@ -93,7 +95,7 @@ const submitTransaction = () => {
     date: date.value,
     amount: parseFloat(amount.value),
     category: category.value,
-    description: description.value,
+    content: description.value,
   };
 
   console.log(type.value);

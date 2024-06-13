@@ -47,8 +47,6 @@ export const useTransactionStore = defineStore('transaction', () => {
         (acc, cur) => (acc += parseInt(cur.amount)),
         0
       );
-
-      console.log(totalIncome.value);
     } catch (error) {
       alert('데이터 통신 오류 발생');
       console.error(error);
@@ -57,19 +55,6 @@ export const useTransactionStore = defineStore('transaction', () => {
   fetchTransactions();
 
   const account = computed(() => [...state.income, ...state.expense]);
-
-  // const totalIncome = computed(() =>
-  //   state.income.reduce((sum, item) => {
-  //     console.log(item);
-  //     sum + Number(item.amount);
-  //   }, 0)
-  // );
-  // console.log(totalIncome.value);
-
-  // const totalExpense = computed(() => state.expense.reduce((sum, item) => sum + Number(item.amount), 0));
-
-  // const balance = computed(() => totalIncome.value - totalExpense.value);
-  // console.log(state);
 
   const transactions = ref([
     {
@@ -140,6 +125,7 @@ export const useTransactionStore = defineStore('transaction', () => {
       );
 
       if (addResponse.status !== 201) return alert('데이터 전송 실패');
+      fetchTransactions();
     } catch (error) {
       alert('데이터 통신 오류 발생');
       console.error(error);
@@ -154,11 +140,33 @@ export const useTransactionStore = defineStore('transaction', () => {
       );
 
       if (addResponse.status !== 201) return alert('데이터 전송 실패');
+      fetchTransactions();
     } catch (error) {
       alert('데이터 통신 오류 발생');
       console.error(error);
     }
   }
+
+  const categoryExpenses = computed(() => {
+    const categories = [
+      '식비',
+      '교통비',
+      '문화생활',
+      '패션/미용',
+      '마트/편의점',
+      '고정비',
+      '기타',
+    ];
+
+    const result = {};
+    categories.forEach((category) => {
+      result[category] = state.expense
+        .filter((expense) => expense.category === category)
+        .reduce((sum, expense) => sum + parseInt(expense.amount), 0);
+    });
+
+    return result;
+  });
 
   const income = computed(() => state.income);
   const expense = computed(() => state.expense);
@@ -181,5 +189,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     getExpensesForMonth,
     getTotalBalanceForMonth,
     fetchTransactions,
+    categoryExpenses,
   };
 });

@@ -1,14 +1,26 @@
 <template>
   <div class="summary-stats">
-    <div class="stat" @click="toggleFilter('showIncome')" :class="{ active: filters.showIncome }">
+    <div
+      class="stat"
+      @click="toggleFilter('showIncome')"
+      :class="{ active: filters.showIncome }"
+    >
       <div class="title">수입</div>
       <div class="value income">{{ formatNumber(income) }}원</div>
     </div>
-    <div class="stat" @click="toggleFilter('showExpense')" :class="{ active: filters.showExpense }">
+    <div
+      class="stat"
+      @click="toggleFilter('showExpense')"
+      :class="{ active: filters.showExpense }"
+    >
       <div class="title">지출</div>
       <div class="value expense">{{ formatNumber(expense) }}원</div>
     </div>
-    <div class="stat" @click="toggleFilter('showBalance')" :class="{ active: filters.showBalance }">
+    <div
+      class="stat"
+      @click="toggleFilter('showBalance')"
+      :class="{ active: filters.showBalance }"
+    >
       <div class="title">합계</div>
       <div class="value">{{ formatNumber(balance) }}원</div>
     </div>
@@ -34,13 +46,10 @@ function formatNumber(value) {
 }
 
 function toggleFilter(filterKey) {
-  const newFilters = { ...filters.value, [filterKey]: !filters.value[filterKey] };
-
-  if (!newFilters.showIncome && !newFilters.showExpense && !newFilters.showBalance) {
-    newFilters.showIncome = true;
-    newFilters.showExpense = true;
-    newFilters.showBalance = true;
-  }
+  const newFilters = {
+    ...filters.value,
+    [filterKey]: !filters.value[filterKey],
+  };
 
   emit('updateFilter', newFilters);
 }
@@ -50,8 +59,9 @@ function toggleFilter(filterKey) {
 .summary-stats {
   display: flex;
   justify-content: space-between;
-  height: 75px;
+  height: 90px;
   background-color: #b5e3e0;
+
   padding: 10px 0;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
@@ -69,12 +79,12 @@ function toggleFilter(filterKey) {
 }
 
 .title {
-  font-size: 15px;
+  font-size: 20px;
   margin-bottom: 5px;
 }
 
 .value {
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .income {
