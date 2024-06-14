@@ -9,6 +9,12 @@
       <button @click="nextMonth">&gt;</button>
     </div>
 
+    <SummaryStats
+      :income="monthlyIncome"
+      :expense="monthlyExpense"
+      :filters="filters"
+    />
+
     <div class="chart-container">
       <DoughnutChart :chartData="chartData" :chartOptions="chartOptions" />
     </div>
@@ -38,6 +44,7 @@ import { ref, computed, watch } from 'vue';
 import DoughnutChart from '@/components/DoughnutChart.vue';
 import Header from '@/components/Header.vue';
 import { useTransactionStore } from '@/stores/transaction';
+import SummaryStats from '@/components/SummaryStats.vue';
 
 const transactionStore = useTransactionStore();
 const { updateMonth } = transactionStore;
@@ -67,6 +74,36 @@ function nextMonth() {
 
   updateMonth(month.value);
 }
+
+const transactions = computed(() => transactionStore.total);
+
+const monthlyIncome = computed(() => {
+  return transactions.value
+    .filter(
+      (transaction) =>
+        transaction.type === 'income' &&
+        new Date(transaction.date).getFullYear() === year.value &&
+        new Date(transaction.date).getMonth() + 1 === month.value
+    )
+    .reduce((sum, transaction) => sum + parseInt(transaction.amount), 0);
+});
+
+const monthlyExpense = computed(() => {
+  return transactions.value
+    .filter(
+      (transaction) =>
+        transaction.type === 'expense' &&
+        new Date(transaction.date).getFullYear() === year.value &&
+        new Date(transaction.date).getMonth() + 1 === month.value
+    )
+    .reduce((sum, transaction) => sum + parseInt(transaction.amount), 0);
+});
+
+const filters = ref({
+  showIncome: true,
+  showExpense: true,
+  showBalance: true,
+});
 
 const chartData = ref({
   labels: [
