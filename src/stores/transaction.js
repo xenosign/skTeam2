@@ -9,6 +9,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     total: [],
     totalIncome: 0,
     totalExpense: 0,
+    month: new Date().getMonth() + 1,
   });
 
   async function fetchTransactions() {
@@ -168,6 +169,43 @@ export const useTransactionStore = defineStore('transaction', () => {
     return result;
   });
 
+  const updateMonth = (month) => {
+    state.month = month;
+  };
+
+  const categoryExpensesByMonth = computed(() => {
+    const categories = [
+      '식비',
+      '교통비',
+      '문화생활',
+      '패션/미용',
+      '마트/편의점',
+      '고정비',
+      '기타',
+    ];
+
+    const date = new Date();
+    const year = date.getFullYear();
+
+    const result = {};
+    categories.forEach((category) => {
+      result[category] = state.expense
+        .filter((expense) => {
+          const expenseDate = new Date(expense.date);
+          return (
+            expense.category === category &&
+            expenseDate.getMonth() === state.month - 1 &&
+            expenseDate.getFullYear() === year
+          );
+        })
+        .reduce((sum, expense) => sum + parseInt(expense.amount), 0);
+    });
+
+    console.log(result);
+
+    return result;
+  });
+
   const income = computed(() => state.income);
   const expense = computed(() => state.expense);
   const total = computed(() => state.total);
@@ -189,6 +227,8 @@ export const useTransactionStore = defineStore('transaction', () => {
     getExpensesForMonth,
     getTotalBalanceForMonth,
     fetchTransactions,
+    categoryExpensesByMonth,
     categoryExpenses,
+    updateMonth,
   };
 });
