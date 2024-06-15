@@ -55,7 +55,6 @@ const chartDataReady = computed(() => {
 watch(
   () => props.chartData,
   (newValue) => {
-    console.log('props 바뀜!!');
     chartKey.value++;
   },
   { deep: true }

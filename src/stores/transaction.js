@@ -201,8 +201,6 @@ export const useTransactionStore = defineStore('transaction', () => {
         .reduce((sum, expense) => sum + parseInt(expense.amount), 0);
     });
 
-    console.log(result);
-
     return result;
   });
 
